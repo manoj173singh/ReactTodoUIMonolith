@@ -15,9 +15,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Required for SonarCloud branch detection
+          fetch-depth: 0
 
-      # 2️⃣ Setup Node.js (React project)
+      # 2️⃣ Setup Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
@@ -27,30 +27,12 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      # 4️⃣ Lint code (check code quality)
-      # - name: Lint code
-      #   run: CI=false npm run lint
-
-      # 5️⃣ Build project (ignore warnings in CI)
+      # 4️⃣ Build project
       - name: Build project
         run: CI=false npm run build
 
-      # 6️⃣ Upload build artifact
-      - name: Upload build artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: react-build
-          path: build/
-
-      # 7️⃣ SonarCloud Scan ✅
+      # 5️⃣ SonarCloud Scan ✅ (FINAL & CORRECT)
       - name: SonarCloud Scan
-        uses: SonarSource/sonarqube-scan-action@v3
+        uses: SonarSource/sonarcloud-github-action@v3
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        with:
-          projectBaseDir: .
-          args: >
-            -Dsonar.host.url=https://sonarcloud.io
-            -Dsonar.organization=manoj173singh
-            -Dsonar.projectKey=manoj173singh_ReactTodoUIMonolith
-            -Dsonar.branch.name=main
